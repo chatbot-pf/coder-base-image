@@ -1,0 +1,57 @@
+FROM codercom/enterprise-base:ubuntu
+
+# Root로 시스템 패키지 설치
+USER root
+RUN apt-get update && \
+    apt-get install -y \
+    zsh \
+    screen \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# coder 사용자의 기본 쉘 변경
+RUN chsh -s /usr/bin/zsh coder
+
+# coder 사용자로 전환
+USER coder
+WORKDIR /home/coder
+
+# 개발 도구 설치를 위한 스크립트
+COPY --chown=coder:coder <<'SCRIPT' /tmp/install.sh
+#!/bin/zsh
+set -e
+
+# NVM 설치 및 설정
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+# Node.js 및 패키지 설치
+nvm install 22
+nvm alias default 22
+npm install -g pnpm firebase-tools repomix cdk turbo vercel @anthropic-ai/claude-code
+
+# SDKMAN 설치
+curl -s "https://get.sdkman.io" | bash
+source "$HOME/.sdkman/bin/sdkman-init.sh"
+
+# .zshrc 업데이트
+cat >> ~/.zshrc << 'EOF'
+
+# NVM
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+# SDKMAN
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$SDKMAN_DIR/bin/sdkman-init.sh" ]] && source "$SDKMAN_DIR/bin/sdkman-init.sh"
+EOF
+SCRIPT
+
+RUN chmod +x /tmp/install.sh && \
+    /usr/bin/zsh /tmp/install.sh && \
+    rm /tmp/install.sh
+
+# 기본 쉘 설정
+ENV SHELL=/usr/bin/zsh
+SHELL ["/usr/bin/zsh", "-c"]
