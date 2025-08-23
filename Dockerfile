@@ -23,7 +23,9 @@ COPY --chown=coder:coder <<'SCRIPT' /tmp/install.sh
 set -e
 
 # Install Zimfw
+ZIM_HOME=${HOME}/.zim
 curl -fsSL https://raw.githubusercontent.com/zimfw/install/master/install.zsh | zsh
+
 
 # NVM 설치 및 설정
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
@@ -52,6 +54,10 @@ export NVM_DIR="$HOME/.nvm"
 # SDKMAN
 export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$SDKMAN_DIR/bin/sdkman-init.sh" ]] && source "$SDKMAN_DIR/bin/sdkman-init.sh"
+
+# ZIM
+export ZIM_HOME=${HOME}/.zim
+[[ -s "${ZIM_HOME}/init.zsh" ]] && source "${ZIM_HOME}/init.zsh"
 EOF
 
 SCRIPT
