@@ -9,13 +9,15 @@ RUN apt-get update && \
     screen \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
-
+    
 # coder 사용자의 기본 쉘 변경
 RUN chsh -s /usr/bin/zsh coder
 
 # coder 사용자로 전환
 USER coder
 WORKDIR /home/coder
+
+RUN cp .zshenv /home/coder
 
 # 개발 도구 설치를 위한 스크립트
 COPY --chown=coder:coder <<'SCRIPT' /tmp/install.sh
