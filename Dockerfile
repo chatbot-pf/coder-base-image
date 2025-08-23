@@ -17,7 +17,7 @@ RUN chsh -s /usr/bin/zsh coder
 USER coder
 WORKDIR /home/coder
 
-ADD .zshenv /home/coder
+ADD .zshenv /home/coder/.zshenv
 
 # 개발 도구 설치를 위한 스크립트
 COPY --chown=coder:coder <<'SCRIPT' /tmp/install.sh
