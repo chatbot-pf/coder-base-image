@@ -22,10 +22,3 @@ source "$HOME/.sdkman/bin/sdkman-init.sh"
 
 # bun 설치
 curl -fsSL https://bun.com/install | bash
-
-# .zshrc 업데이트
-cat >> ~/.zshrc << 'EOF'
-
-# BUN
-export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
