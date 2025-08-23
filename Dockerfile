@@ -28,13 +28,16 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
 # Node.js 및 패키지 설치
+nvm install --lts
 nvm install 22
 nvm alias default 22
-npm install -g pnpm firebase-tools repomix cdk turbo vercel @anthropic-ai/claude-code
 
 # SDKMAN 설치
 curl -s "https://get.sdkman.io" | bash
 source "$HOME/.sdkman/bin/sdkman-init.sh"
+
+# bun 설치
+curl -fsSL https://bun.com/install | bash
 
 # .zshrc 업데이트
 cat >> ~/.zshrc << 'EOF'
@@ -46,8 +49,14 @@ export NVM_DIR="$HOME/.nvm"
 # SDKMAN
 export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$SDKMAN_DIR/bin/sdkman-init.sh" ]] && source "$SDKMAN_DIR/bin/sdkman-init.sh"
+
+# BUN
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
 EOF
+
 SCRIPT
+
 
 RUN chmod +x /tmp/install.sh && \
     /usr/bin/zsh /tmp/install.sh && \
