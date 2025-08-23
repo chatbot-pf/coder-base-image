@@ -49,14 +49,6 @@ curl -fsSL https://bun.com/install | bash
 # .zshrc 업데이트
 cat >> ~/.zshrc << 'EOF'
 
-# NVM
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-
-# SDKMAN
-export SDKMAN_DIR="$HOME/.sdkman"
-[[ -s "$SDKMAN_DIR/bin/sdkman-init.sh" ]] && source "$SDKMAN_DIR/bin/sdkman-init.sh"
-
 # ZIM
 export ZIM_HOME=${HOME}/.zim
 [[ -s "${ZIM_HOME}/init.zsh" ]] && source "${ZIM_HOME}/init.zsh"
