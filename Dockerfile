@@ -49,11 +49,9 @@ curl -fsSL https://bun.com/install | bash
 # .zshrc 업데이트
 cat >> ~/.zshrc << 'EOF'
 
-# ZIM
-export ZIM_HOME=${HOME}/.zim
-[[ -s "${ZIM_HOME}/init.zsh" ]] && source "${ZIM_HOME}/init.zsh"
-EOF
-
+# BUN
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
 SCRIPT
 
 
