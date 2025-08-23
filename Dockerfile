@@ -22,6 +22,9 @@ COPY --chown=coder:coder <<'SCRIPT' /tmp/install.sh
 #!/bin/zsh
 set -e
 
+# Install Zimfw
+curl -fsSL https://raw.githubusercontent.com/zimfw/install/master/install.zsh | zsh
+
 # NVM 설치 및 설정
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
 export NVM_DIR="$HOME/.nvm"
