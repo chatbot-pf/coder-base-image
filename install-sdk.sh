@@ -27,5 +27,8 @@ curl -fsSL https://bun.com/install | bash
 echo "Installing Claude Code..."
 curl -fsSL https://claude.ai/install.sh | bash
 
+# FVM 설치
+curl -fsSL https://fvm.app/install.sh | bash
+
 # PATH에 Claude Code 추가 (zshrc에 추가)
 echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc
