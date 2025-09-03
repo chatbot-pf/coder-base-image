@@ -38,6 +38,12 @@ COPY --chown=root:root install-fonts.sh /tmp/install-fonts.sh
 RUN chmod +x /tmp/install-fonts.sh && /tmp/install-fonts.sh
 RUN rm /tmp/install-fonts.sh
 
+# root 개발 도구 설치를 위한 스크립트
+COPY --chown=root:root install-root-sdk.sh /tmp/install-root-sdk.sh
+RUN chmod +x /tmp/install-root-sdk.sh && \
+    /usr/bin/zsh /tmp/install-root-sdk.sh && \
+    rm /tmp/install-root-sdk.sh
+
 # coder 사용자로 전환
 USER coder
 WORKDIR /home/coder
