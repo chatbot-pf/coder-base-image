@@ -1,5 +1,7 @@
 FROM codercom/enterprise-base:ubuntu
 
+ENV TZ="Asia/Seoul"
+
 # Root로 시스템 패키지 설치
 USER root
 RUN apt-get update && \
