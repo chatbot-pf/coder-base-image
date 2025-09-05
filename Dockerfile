@@ -4,6 +4,19 @@ ENV TZ="Asia/Seoul"
 
 # Root로 시스템 패키지 설치
 USER root
+
+# Ubuntu 미러를 Kakao로 변경 (신형식 및 구형식 모두 지원)
+RUN if [ -f /etc/apt/sources.list.d/ubuntu.sources ]; then \
+        sed -i 's|http://archive.ubuntu.com|http://mirror.kakao.com|g' /etc/apt/sources.list.d/ubuntu.sources && \
+        sed -i 's|http://security.ubuntu.com|http://mirror.kakao.com|g' /etc/apt/sources.list.d/ubuntu.sources && \
+        sed -i 's|https://archive.ubuntu.com|http://mirror.kakao.com|g' /etc/apt/sources.list.d/ubuntu.sources && \
+        sed -i 's|https://security.ubuntu.com|http://mirror.kakao.com|g' /etc/apt/sources.list.d/ubuntu.sources; \
+    fi && \
+    if [ -f /etc/apt/sources.list ]; then \
+        sed -i 's|http://archive.ubuntu.com|http://mirror.kakao.com|g' /etc/apt/sources.list && \
+        sed -i 's|http://security.ubuntu.com|http://mirror.kakao.com|g' /etc/apt/sources.list; \
+    fi
+
 RUN apt-get update && \
     apt-get install -y \
     zip \
