@@ -9,6 +9,7 @@ RUN apt-get update && \
     zip \
     zsh \
     screen \
+    lsof \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
