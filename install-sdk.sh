@@ -23,6 +23,9 @@ source "$HOME/.sdkman/bin/sdkman-init.sh"
 # bun 설치
 curl -fsSL https://bun.com/install | bash
 
+# Deno 설치
+curl -fsSL https://deno.land/install.sh | sh -s -- --yes
+
 # Claude Code 설치
 echo "Installing Claude Code..."
 curl -fsSL https://claude.ai/install.sh | bash

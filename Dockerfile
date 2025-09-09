@@ -60,6 +60,16 @@ RUN chmod +x /tmp/install-root-sdk.sh && \
     /usr/bin/zsh /tmp/install-root-sdk.sh && \
     rm /tmp/install-root-sdk.sh
 
+# Docker 설치
+COPY --chown=root:root install-docker.sh /tmp/install-docker.sh
+RUN chmod +x /tmp/install-docker.sh && \
+    /tmp/install-docker.sh && \
+    rm /tmp/install-docker.sh
+
+# coder 사용자를 docker 그룹에 추가
+RUN usermod -aG docker coder
+
+
 # coder 사용자로 전환
 USER coder
 WORKDIR /home/coder
