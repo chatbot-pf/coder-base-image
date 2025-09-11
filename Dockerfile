@@ -23,6 +23,7 @@ RUN apt-get update && \
     zsh \
     screen \
     lsof \
+    amazon-ecr-credential-helper \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
