@@ -30,8 +30,6 @@ zmodule utility
 # A heavily reduced, ASCII-only version of the Spaceship and Starship prompts.
 # zmodule asciiship
 
-zmodule romkatv/powerlevel10k --use degit
-
 #
 # Completion
 #
