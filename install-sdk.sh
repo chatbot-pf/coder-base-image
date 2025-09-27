@@ -23,7 +23,7 @@ curl -fsSL https://fnm.vercel.app/install | bash
 fnm install --lts
 fnm install 22
 fnm alias default 22
-
+alias nvm="fnm"
 
 # SDKMAN 설치
 curl -s "https://get.sdkman.io" | bash
