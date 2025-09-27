@@ -7,14 +7,23 @@ curl -fsSL https://raw.githubusercontent.com/zimfw/install/master/install.zsh | 
 
 
 # NVM 설치 및 설정
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+# curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
+# export NVM_DIR="$HOME/.nvm"
+# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
 # Node.js 및 패키지 설치
-nvm install --lts
-nvm install 22
-nvm alias default 22
+# nvm install --lts
+# nvm install 22
+# nvm alias default 22
+
+# fnm 설치
+curl -fsSL https://fnm.vercel.app/install | bash
+
+# Node.js 및 패키지 설치
+fnm install --lts
+fnm install 22
+fnm alias default 22
+
 
 # SDKMAN 설치
 curl -s "https://get.sdkman.io" | bash
