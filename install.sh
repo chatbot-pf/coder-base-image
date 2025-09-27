@@ -69,12 +69,7 @@ add_header_block() {
 # Generated: $(date +%Y-%m-%d\ %H:%M:%S)
 # DO NOT EDIT THIS BLOCK MANUALLY
 
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
+source ${ZIM_HOME}/modules/zsh-defer/zsh-defer.plugin.zsh
 
 $footer_marker
 
@@ -97,13 +92,11 @@ $footer_marker
 
 # Copy .zimrc to home directory
 cp .zimrc ~/
-cp .p10k.zsh ~/
 
 # Install Zim modules
 zimfw install
 
 add_header_block
-add_to_zshrc "P10K_CONFIG" '
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+add_to_zshrc "on-my-posh" '
+eval "$(oh-my-posh init zsh)"
 '

@@ -44,3 +44,7 @@ curl -fsSL https://fvm.app/install.sh | bash
 
 # PATH에 Claude Code 추가 (zshrc에 추가)
 echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc
+
+# Oh My Posh 설치
+curl -s https://ohmyposh.dev/install.sh | bash -s
+
