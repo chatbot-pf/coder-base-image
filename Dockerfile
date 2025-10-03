@@ -51,18 +51,18 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # 폰트 설치 스크립트
-COPY --chown=root:root install-fonts.sh /tmp/install-fonts.sh
+COPY --chown=root:root scripts/install-fonts.sh /tmp/install-fonts.sh
 RUN chmod +x /tmp/install-fonts.sh && /tmp/install-fonts.sh
 RUN rm /tmp/install-fonts.sh
 
 # root 개발 도구 설치를 위한 스크립트
-COPY --chown=root:root install-root-sdk.sh /tmp/install-root-sdk.sh
+COPY --chown=root:root scripts/install-root-sdk.sh /tmp/install-root-sdk.sh
 RUN chmod +x /tmp/install-root-sdk.sh && \
     /usr/bin/zsh /tmp/install-root-sdk.sh && \
     rm /tmp/install-root-sdk.sh
 
 # Docker 설치
-COPY --chown=root:root install-docker.sh /tmp/install-docker.sh
+COPY --chown=root:root scripts/install-docker.sh /tmp/install-docker.sh
 RUN chmod +x /tmp/install-docker.sh && \
     /tmp/install-docker.sh && \
     rm /tmp/install-docker.sh
@@ -78,10 +78,28 @@ WORKDIR /home/coder
 COPY .zshenv /home/coder/.zshenv
 
 # 개발 도구 설치를 위한 스크립트
-COPY --chown=coder:coder install-sdk.sh /tmp/install-sdk.sh
+COPY --chown=coder:coder scripts/install-sdk.sh /tmp/install-sdk.sh
 RUN chmod +x /tmp/install-sdk.sh && \
     /usr/bin/zsh /tmp/install-sdk.sh && \
     rm /tmp/install-sdk.sh
+
+# Oh My Posh 설치 (Homebrew 불필요)
+COPY --chown=coder:coder scripts/install-ohmyposh.sh /tmp/install-ohmyposh.sh
+RUN chmod +x /tmp/install-ohmyposh.sh && \
+    /bin/bash /tmp/install-ohmyposh.sh && \
+    rm /tmp/install-ohmyposh.sh
+
+# Homebrew 설치
+COPY --chown=coder:coder scripts/install-brew.sh /tmp/install-brew.sh
+RUN chmod +x /tmp/install-brew.sh && \
+    /usr/bin/zsh /tmp/install-brew.sh && \
+    rm /tmp/install-brew.sh
+
+# Graphite CLI 설치 (Homebrew 필요)
+COPY --chown=coder:coder scripts/install-graphite.sh /tmp/install-graphite.sh
+RUN chmod +x /tmp/install-graphite.sh && \
+    /usr/bin/zsh /tmp/install-graphite.sh && \
+    rm /tmp/install-graphite.sh
 
 # 기본 쉘 설정
 ENV SHELL=/usr/bin/zsh
