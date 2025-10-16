@@ -12,7 +12,7 @@ This is a Docker base image for Coder workspaces, built on top of `codercom/ente
 - Docker with coder user in docker group
 - Homebrew package manager
 - Graphite CLI for stacked PRs
-- AWS CLI and Qodana CLI
+- AWS CLI, Google Cloud CLI, and Qodana CLI
 - Custom Nerd Fonts for terminal display
 
 ## Common Commands
@@ -39,10 +39,11 @@ The repository uses a two-phase Docker build with clear separation between root 
 1. Ubuntu mirror changed to Kakao for faster downloads (Korea region)
 2. System packages installed (zip, zsh, screen, lsof, amazon-ecr-credential-helper)
 3. GitHub CLI installed via apt repository
-4. Default shell changed to zsh for coder user
-5. Fonts installed system-wide
-6. Root-level tools installed (Qodana CLI, AWS CLI)
-7. Docker installed and coder user added to docker group
+4. Google Cloud CLI installed via apt repository
+5. Default shell changed to zsh for coder user
+6. Fonts installed system-wide
+7. Root-level tools installed (Qodana CLI, AWS CLI)
+8. Docker installed and coder user added to docker group
 
 **Phase 2 - Coder User Setup:**
 1. Development SDKs installed (Zimfw, fnm, Node.js, SDKMAN, Bun, Deno, Claude Code, FVM)
