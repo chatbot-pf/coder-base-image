@@ -58,21 +58,11 @@ A comprehensive Docker base image for [Coder](https://coder.com/) workspaces, bu
    docker pull ghcr.io/rebooter-dev/coder-base-image:main
    ```
 
-2. **Add to your Coder template:**
-   ```hcl
-   resource "docker_image" "coder_base" {
-     name = "ghcr.io/rebooter-dev/coder-base-image:main"
-   }
-
-   resource "coder_workspace" "dev" {
-     image = docker_image.coder_base.name
-     # ... other configuration
-   }
-   ```
-
-3. **Or use Dev Container in Coder (recommended):**
+2. **Use Dev Container in Coder (recommended):**
 
    Coder supports Dev Containers natively. See [Coder Dev Container docs](https://coder.com/docs/admin/templates/managing-templates/devcontainers) for details.
+
+   For Coder workspace templates using this image, see the separate [coder-templates](https://github.com/rebooter-dev/coder-templates) repository.
 
 ### Building Locally
 

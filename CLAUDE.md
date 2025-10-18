@@ -22,10 +22,6 @@ This is a Docker base image for Coder workspaces, built on top of `codercom/ente
 ├── images/                 # Docker images directory
 │   ├── base/              # Base development image
 │   └── CLAUDE.md          # Detailed images documentation
-├── templates/             # Coder workspace templates
-│   ├── docker/            # Main development workspace template
-│   ├── git-setup/         # Repository setup template (one-time use)
-│   └── CLAUDE.md          # Templates workflow guide
 ├── .devcontainer/         # VS Code Dev Container configuration
 ├── .github/workflows/     # CI/CD workflows
 ├── docs/                  # Documentation
@@ -34,7 +30,6 @@ This is a Docker base image for Coder workspaces, built on top of `codercom/ente
 
 **For detailed information:**
 - **Docker images, build process, and scripts:** See [images/CLAUDE.md](images/CLAUDE.md)
-- **Coder templates and issue-based workflow:** See [templates/CLAUDE.md](templates/CLAUDE.md)
 
 ## Common Commands
 
