@@ -15,6 +15,27 @@ This is a Docker base image for Coder workspaces, built on top of `codercom/ente
 - AWS CLI, Google Cloud CLI, and Qodana CLI
 - Custom Nerd Fonts for terminal display
 
+## Repository Structure
+
+```
+.
+├── images/                 # Docker images directory
+│   ├── base/              # Base development image
+│   └── CLAUDE.md          # Detailed images documentation
+├── templates/             # Coder workspace templates
+│   ├── docker/            # Main development workspace template
+│   ├── git-setup/         # Repository setup template (one-time use)
+│   └── CLAUDE.md          # Templates workflow guide
+├── .devcontainer/         # VS Code Dev Container configuration
+├── .github/workflows/     # CI/CD workflows
+├── docs/                  # Documentation
+└── CLAUDE.md             # This file - repository guidance
+```
+
+**For detailed information:**
+- **Docker images, build process, and scripts:** See [images/CLAUDE.md](images/CLAUDE.md)
+- **Coder templates and issue-based workflow:** See [templates/CLAUDE.md](templates/CLAUDE.md)
+
 ## Common Commands
 
 ### Build and Deploy
@@ -31,42 +52,13 @@ docker build -t coder-base-image .
 
 ## Architecture
 
-The repository uses a two-phase Docker build with clear separation between root and user installations:
+The repository uses a two-phase Docker build with clear separation between root and user installations.
 
-### Build Phases
+**Build Phases:**
+- **Phase 1 (Root)**: System packages, CLI tools (gh, gcloud), fonts, Docker, root-level tools
+- **Phase 2 (Coder User)**: Development SDKs, Oh My Posh, Homebrew, Graphite CLI
 
-**Phase 1 - Root User Setup:**
-1. Ubuntu mirror changed to Kakao for faster downloads (Korea region)
-2. System packages installed (zip, zsh, screen, lsof, amazon-ecr-credential-helper)
-3. GitHub CLI installed via apt repository
-4. Google Cloud CLI installed via apt repository
-5. Default shell changed to zsh for coder user
-6. Fonts installed system-wide
-7. Root-level tools installed (Qodana CLI, AWS CLI)
-8. Docker installed and coder user added to docker group
-
-**Phase 2 - Coder User Setup:**
-1. Development SDKs installed (Zimfw, fnm, Node.js, SDKMAN, Bun, Deno, Claude Code, FVM)
-2. Oh My Posh installed for shell prompt theming
-3. Homebrew installed
-4. Graphite CLI installed via Homebrew
-
-### Script Organization
-
-All installation scripts are in `scripts/` directory:
-- `install-fonts.sh` - System fonts (MesloLGS NF, JetBrainsMono Nerd Font, D2Coding)
-- `install-root-sdk.sh` - Root-level tools (Qodana, AWS CLI)
-- `install-docker.sh` - Docker Engine installation
-- `install-sdk.sh` - User development tools (fnm, SDKMAN, Bun, Deno, Claude Code, FVM)
-- `install-ohmyposh.sh` - Oh My Posh prompt (uses official installer)
-- `install-brew.sh` - Homebrew package manager
-- `install-graphite.sh` - Graphite CLI for stacked PRs
-
-### Key Configuration Files
-
-- `.zimrc` - Zimfw modules (git, input, completion, syntax-highlighting, autosuggestions, vim-mode)
-- `.zshenv` - Environment variable to skip global compinit
-- `.p10k.zsh` - Powerlevel10k configuration (legacy, being replaced by Oh My Posh)
+**For detailed build phases, script organization, and configuration files, see [images/CLAUDE.md](images/CLAUDE.md)**
 
 ### CI/CD
 
