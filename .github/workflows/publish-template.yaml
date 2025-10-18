@@ -22,13 +22,13 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  detect-changes:
-    name: Detect Changed Templates
+  test-and-publish:
+    name: Test and Publish - ${{ matrix.template }}
     runs-on: ubuntu-latest
-    outputs:
-      docker: ${{ steps.filter.outputs.docker }}
-      git-setup: ${{ steps.filter.outputs.git-setup }}
-      any_changed: ${{ steps.filter.outputs.changes }}
+    strategy:
+      fail-fast: false
+      matrix:
+        template: [docker, git-setup]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -43,32 +43,20 @@ jobs:
             git-setup:
               - 'templates/git-setup/**'
 
-      - name: Show detected changes
-        run: |
-          echo "Docker template changed: ${{ steps.filter.outputs.docker }}"
-          echo "Git-setup template changed: ${{ steps.filter.outputs.git-setup }}"
-
-  test-and-publish:
-    name: Test and Publish - ${{ matrix.template }}
-    needs: detect-changes
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        template: [docker, git-setup]
-        include:
-          - template: docker
-            changed: ${{ needs.detect-changes.outputs.docker }}
-          - template: git-setup
-            changed: ${{ needs.detect-changes.outputs.git-setup }}
-    steps:
-      - name: Check if job should run
+      - name: Determine if job should run
         id: should_run
         run: |
+          # Check if this specific template changed
+          if [[ "${{ matrix.template }}" == "docker" ]]; then
+            CHANGED="${{ steps.filter.outputs.docker }}"
+          else
+            CHANGED="${{ steps.filter.outputs.git-setup }}"
+          fi
+
           # Skip if:
           # - Push event and this template hasn't changed
           # - Manual trigger with specific template that doesn't match this one
-          if [[ "${{ github.event_name }}" == "push" && "${{ matrix.changed }}" != "true" ]]; then
+          if [[ "${{ github.event_name }}" == "push" && "$CHANGED" != "true" ]]; then
             echo "Skipping - no changes detected for ${{ matrix.template }}"
             echo "skip=true" >> $GITHUB_OUTPUT
           elif [[ "${{ github.event_name }}" == "workflow_dispatch" && -n "${{ github.event.inputs.template }}" && "${{ github.event.inputs.template }}" != "${{ matrix.template }}" ]]; then
@@ -78,10 +66,6 @@ jobs:
             echo "Running workflow for ${{ matrix.template }}"
             echo "skip=false" >> $GITHUB_OUTPUT
           fi
-
-      - name: Checkout repository
-        if: steps.should_run.outputs.skip != 'true'
-        uses: actions/checkout@v4
 
       - name: Set up Terraform
         if: steps.should_run.outputs.skip != 'true'
