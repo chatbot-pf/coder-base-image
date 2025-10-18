@@ -1,18 +1,65 @@
-name: Test and Publish Coder Template
+name: Test and Publish Coder Templates
 
 on:
   push:
     branches:
       - main
     paths:
-      - 'templates/docker/**'
+      - 'templates/**'
   workflow_dispatch:
+    inputs:
+      template:
+        description: 'Template to publish (leave empty for all changed templates)'
+        required: false
+        type: choice
+        options:
+          - ''
+          - docker
+          - git-setup
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  test-and-publish:
+  detect-changes:
+    name: Detect Changed Templates
     runs-on: ubuntu-latest
-    env:
-      TEMPLATE_NAME: "docker"
+    outputs:
+      docker: ${{ steps.filter.outputs.docker }}
+      git-setup: ${{ steps.filter.outputs.git-setup }}
+      any_changed: ${{ steps.filter.outputs.changes }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check for template changes
+        uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          filters: |
+            docker:
+              - 'templates/docker/**'
+            git-setup:
+              - 'templates/git-setup/**'
+
+      - name: Show detected changes
+        run: |
+          echo "Docker template changed: ${{ steps.filter.outputs.docker }}"
+          echo "Git-setup template changed: ${{ steps.filter.outputs.git-setup }}"
+
+  test-and-publish:
+    name: Test and Publish - ${{ matrix.template }}
+    needs: detect-changes
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        template: [docker, git-setup]
+    # Skip if no changes detected (unless manually triggered with specific template)
+    if: |
+      (github.event_name == 'workflow_dispatch' && (github.event.inputs.template == matrix.template || github.event.inputs.template == '')) ||
+      (github.event_name == 'push' && needs.detect-changes.outputs[matrix.template] == 'true')
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -30,7 +77,7 @@ jobs:
 
       - name: Validate Terraform template
         run: terraform validate
-        working-directory: ./templates/${TEMPLATE_NAME}
+        working-directory: ./templates/${{ matrix.template }}
 
       - name: Get short commit SHA to use as template version name
         id: name
@@ -38,27 +85,36 @@ jobs:
 
       - name: Get latest commit title to use as template version description
         id: message
-        run:
-          echo "pr_title=$(git log --format=%s -n 1 ${{ github.sha }})" >>
-          $GITHUB_OUTPUT
+        run: echo "pr_title=$(git log --format=%s -n 1 ${{ github.sha }})" >> "$GITHUB_OUTPUT"
 
       - name: Push template to Coder
         run: |
-          coder templates push $TEMPLATE_NAME --activate=false --name ${{ steps.name.outputs.version_name }} --message "${{ steps.message.outputs.pr_title }}" --yes
-        working-directory: ./templates/${TEMPLATE_NAME}
+          coder templates push ${{ matrix.template }} \
+            --activate=false \
+            --name ${{ steps.name.outputs.version_name }} \
+            --message "${{ steps.message.outputs.pr_title }}" \
+            --yes
+        working-directory: ./templates/${{ matrix.template }}
 
       #- name: Create a test workspace and run some example commands
       #  run: |
-      #    coder create -t $TEMPLATE_NAME --template-version ${{ steps.name.outputs.version_name }} test-${{ steps.name.outputs.version_name }} --yes
+      #    coder create -t ${{ matrix.template }} \
+      #      --template-version ${{ steps.name.outputs.version_name }} \
+      #      test-${{ matrix.template }}-${{ steps.name.outputs.version_name }} \
+      #      --yes
       #    # run some example commands
-      #    coder ssh test-${{ steps.name.outputs.version_name }} -- make build
-      #  working-directory: ./templates/${TEMPLATE_NAME}
+      #    coder ssh test-${{ matrix.template }}-${{ steps.name.outputs.version_name }} -- echo "Test passed"
+      #  working-directory: ./templates/${{ matrix.template }}
 
       - name: Delete the test workspace
         if: always()
-        run: coder delete test-${{ steps.name.outputs.version_name }} --yes
+        run: coder delete test-${{ matrix.template }}-${{ steps.name.outputs.version_name }} --yes
+        continue-on-error: true
 
       - name: Promote template version
         if: success()
         run: |
-          coder template version promote --template=$TEMPLATE_NAME --template-version=${{ steps.name.outputs.version_name }} --yes
+          coder template version promote \
+            --template=${{ matrix.template }} \
+            --template-version=${{ steps.name.outputs.version_name }} \
+            --yes
