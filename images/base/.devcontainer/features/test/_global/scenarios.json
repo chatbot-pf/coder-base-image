@@ -1,0 +1,64 @@
+{
+    "full_stack_dev": {
+        "image": "ubuntu:22.04",
+        "features": {
+            "shell-utils": {
+                "shellFramework": "zimfw",
+                "installOhMyPosh": true
+            },
+            "node": {
+                "version": "22",
+                "installYarn": true,
+                "installPnpm": true
+            },
+            "graphite": {},
+            "bun": {},
+            "deno": {}
+        }
+    },
+    "jvm_development": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "shell-utils": {
+                "shellFramework": "ohmyzsh",
+                "installOhMyPosh": false
+            },
+            "node": {
+                "version": "lts"
+            },
+            "sdkman": {}
+        }
+    },
+    "minimal_javascript": {
+        "image": "ubuntu:22.04",
+        "features": {
+            "shell-utils": {},
+            "node": {
+                "version": "20",
+                "installYarn": false,
+                "installPnpm": false
+            },
+            "bun": {}
+        }
+    },
+    "complete_environment": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "shell-utils": {
+                "shellFramework": "zimfw",
+                "installOhMyPosh": true
+            },
+            "node": {
+                "version": "22",
+                "installYarn": true,
+                "installPnpm": true
+            },
+            "graphite": {},
+            "bun": {},
+            "deno": {},
+            "sdkman": {},
+            "claude-code": {},
+            "fvm": {}
+        }
+    }
+}

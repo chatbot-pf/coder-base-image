@@ -1,0 +1,69 @@
+name: "Validate Features"
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: "Install latest devcontainer CLI"
+        run: npm install -g @devcontainers/cli
+
+      - name: "Validate feature metadata"
+        run: |
+          set -e
+          echo "Validating all features..."
+
+          for feature in src/*/; do
+            feature_name=$(basename "$feature")
+            echo "Validating $feature_name..."
+
+            # Check devcontainer-feature.json exists
+            if [ ! -f "$feature/devcontainer-feature.json" ]; then
+              echo "ERROR: Missing devcontainer-feature.json in $feature_name"
+              exit 1
+            fi
+
+            # Check install.sh exists and is executable
+            if [ ! -f "$feature/install.sh" ]; then
+              echo "ERROR: Missing install.sh in $feature_name"
+              exit 1
+            fi
+
+            if [ ! -x "$feature/install.sh" ]; then
+              echo "ERROR: install.sh is not executable in $feature_name"
+              exit 1
+            fi
+
+            # Validate JSON syntax
+            if ! jq empty "$feature/devcontainer-feature.json" 2>/dev/null; then
+              echo "ERROR: Invalid JSON in $feature_name/devcontainer-feature.json"
+              exit 1
+            fi
+
+            echo "✅ $feature_name is valid"
+          done
+
+          echo "All features validated successfully!"
+
+      - name: "Check for test files"
+        run: |
+          set -e
+          echo "Checking test coverage..."
+
+          for feature in src/*/; do
+            feature_name=$(basename "$feature")
+
+            if [ ! -f "test/$feature_name/test.sh" ]; then
+              echo "WARNING: No test.sh found for $feature_name"
+            else
+              echo "✅ Test found for $feature_name"
+            fi
+          done

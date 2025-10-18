@@ -1,0 +1,34 @@
+{
+    "with_lts": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "node": {
+                "version": "lts",
+                "installYarn": true,
+                "installPnpm": true
+            }
+        }
+    },
+    "with_version_22": {
+        "image": "ubuntu:22.04",
+        "features": {
+            "node": {
+                "version": "22",
+                "installLts": true,
+                "installYarn": true,
+                "installPnpm": true
+            }
+        }
+    },
+    "minimal": {
+        "image": "ubuntu:22.04",
+        "features": {
+            "node": {
+                "version": "20",
+                "installLts": false,
+                "installYarn": false,
+                "installPnpm": false
+            }
+        }
+    }
+}

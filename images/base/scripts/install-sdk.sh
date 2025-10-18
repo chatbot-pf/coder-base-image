@@ -19,10 +19,16 @@ curl -fsSL https://raw.githubusercontent.com/zimfw/install/master/install.zsh | 
 # fnm 설치
 curl -fsSL https://fnm.vercel.app/install | bash
 
+# fnm 환경 설정 (즉시 사용을 위해)
+export FNM_PATH="$HOME/.local/share/fnm"
+export PATH="$FNM_PATH:$PATH"
+eval "$(fnm env --shell zsh)"
+
 # Node.js 및 패키지 설치
 fnm install --lts
 fnm install 22
 fnm alias default 22
+fnm use 22  # 현재 세션에서 Node.js 22 활성화
 alias nvm="fnm"
 
 # SDKMAN 설치

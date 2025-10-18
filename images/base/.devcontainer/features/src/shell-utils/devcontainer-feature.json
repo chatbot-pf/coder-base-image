@@ -1,0 +1,46 @@
+{
+  "id": "shell-utils",
+  "version": "1.0.0",
+  "name": "Shell Utilities (Zsh, Zimfw, Oh My Posh)",
+  "documentationURL": "https://github.com/amondnet/devcontainer-features/tree/main/src/shell-utils",
+  "description": "Installs and configures Zsh with choice of Zimfw or Oh My Zsh, plus Oh My Posh for prompt customization. Enhanced alternative to common-utils.",
+  "options": {
+    "installZsh": {
+      "type": "boolean",
+      "default": true,
+      "description": "Install Zsh shell?"
+    },
+    "configureZshAsDefaultShell": {
+      "type": "boolean",
+      "default": true,
+      "description": "Set Zsh as the default shell for the user?"
+    },
+    "shellFramework": {
+      "type": "string",
+      "enum": ["zimfw", "ohmyzsh", "none"],
+      "default": "zimfw",
+      "description": "Choose shell framework: zimfw (modern, fast), ohmyzsh (popular), or none"
+    },
+    "installOhMyPosh": {
+      "type": "boolean",
+      "default": true,
+      "description": "Install Oh My Posh for customizable prompt themes?"
+    },
+    "ohMyPoshTheme": {
+      "type": "string",
+      "default": "default",
+      "description": "Oh My Posh theme to use (e.g., 'agnoster', 'paradox', 'default')"
+    },
+    "username": {
+      "type": "string",
+      "proposals": ["automatic", "vscode", "codespace", "coder", "none"],
+      "default": "automatic",
+      "description": "Username to configure (automatic will detect existing user)"
+    },
+    "upgradePackages": {
+      "type": "boolean",
+      "default": true,
+      "description": "Upgrade OS packages during installation?"
+    }
+  }
+}

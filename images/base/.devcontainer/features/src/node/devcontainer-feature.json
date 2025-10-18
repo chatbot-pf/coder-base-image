@@ -1,0 +1,41 @@
+{
+  "id": "node",
+  "version": "1.0.0",
+  "name": "Node.js (via fnm), yarn and pnpm",
+  "documentationURL": "https://github.com/amondnet/devcontainer-features/tree/main/src/node",
+  "description": "Installs Node.js via fnm (Fast Node Manager), with yarn and pnpm support. Alternative to nvm with better performance.",
+  "options": {
+    "version": {
+      "type": "string",
+      "proposals": ["lts", "latest", "22", "20", "18"],
+      "default": "lts",
+      "description": "Select or enter a Node.js version to install"
+    },
+    "installLts": {
+      "type": "boolean",
+      "default": true,
+      "description": "Install Node.js LTS version in addition to specified version?"
+    },
+    "installYarn": {
+      "type": "boolean",
+      "default": true,
+      "description": "Install Yarn package manager?"
+    },
+    "installPnpm": {
+      "type": "boolean",
+      "default": true,
+      "description": "Install pnpm package manager?"
+    },
+    "pnpmVersion": {
+      "type": "string",
+      "proposals": ["latest", "8", "9"],
+      "default": "latest",
+      "description": "pnpm version to install"
+    },
+    "nvmAlias": {
+      "type": "boolean",
+      "default": true,
+      "description": "Create 'nvm' alias for fnm for compatibility?"
+    }
+  }
+}

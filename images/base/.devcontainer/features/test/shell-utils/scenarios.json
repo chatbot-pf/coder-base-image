@@ -1,0 +1,29 @@
+{
+    "with_zimfw": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "shell-utils": {
+                "shellFramework": "zimfw",
+                "installOhMyPosh": true
+            }
+        }
+    },
+    "with_ohmyzsh": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "shell-utils": {
+                "shellFramework": "ohmyzsh",
+                "installOhMyPosh": true
+            }
+        }
+    },
+    "without_ohmyposh": {
+        "image": "ubuntu:22.04",
+        "features": {
+            "shell-utils": {
+                "shellFramework": "zimfw",
+                "installOhMyPosh": false
+            }
+        }
+    }
+}

@@ -1,0 +1,8 @@
+{
+  "id": "bun",
+  "version": "1.0.0",
+  "name": "Bun",
+  "description": "Installs Bun - Fast JavaScript runtime and toolkit",
+  "documentationURL": "https://github.com/amondnet/devcontainer-features/tree/main/src/bun",
+  "options": {}
+}
