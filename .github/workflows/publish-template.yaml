@@ -56,10 +56,15 @@ jobs:
       fail-fast: false
       matrix:
         template: [docker, git-setup]
+        include:
+          - template: docker
+            changed: ${{ needs.detect-changes.outputs.docker }}
+          - template: git-setup
+            changed: ${{ needs.detect-changes.outputs.git-setup }}
     # Skip if no changes detected (unless manually triggered with specific template)
     if: |
-      (github.event_name == 'workflow_dispatch' && (github.event.inputs.template == matrix.template || github.event.inputs.template == '')) ||
-      (github.event_name == 'push' && needs.detect-changes.outputs[matrix.template] == 'true')
+      github.event_name == 'workflow_dispatch' && (github.event.inputs.template == '' || github.event.inputs.template == matrix.template) ||
+      github.event_name == 'push' && matrix.changed == 'true'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
