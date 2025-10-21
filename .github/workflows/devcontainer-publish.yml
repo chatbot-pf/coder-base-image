@@ -1,0 +1,48 @@
+name: Dev Container
+
+on:
+  schedule:
+    - cron: '27 20 * * *'
+  push:
+    branches: [ "main" ]
+    paths:
+      - 'images/dev/**'
+      - '.github/workflows/devcontainer-publish.yml'
+    tags: [ 'v*.*.*' ]
+  pull_request:
+    branches: [ "main" ]
+    paths:
+      - 'images/dev/**'
+      - '.github/workflows/devcontainer-publish.yml'
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}/dev
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log into registry ${{ env.REGISTRY }}
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d # v3.0.0
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Pre-build dev container image
+        uses: devcontainers/ci@v0.3
+        with:
+          subFolder: images/dev
+          imageName: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          cacheFrom: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          push: ${{ github.event_name != 'pull_request' && 'always' || 'never' }}
