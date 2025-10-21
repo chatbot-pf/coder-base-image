@@ -1,8 +1,0 @@
-{
-  "id": "graphite",
-  "version": "1.0.0",
-  "name": "Graphite CLI",
-  "description": "Installs Graphite CLI for stacked pull request workflows (via npm)",
-  "documentationURL": "https://github.com/amondnet/devcontainer-features/tree/main/src/graphite",
-  "options": {}
-}

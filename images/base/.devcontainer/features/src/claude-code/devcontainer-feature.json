@@ -1,8 +1,0 @@
-{
-  "id": "claude-code",
-  "version": "1.0.0",
-  "name": "Claude Code CLI",
-  "description": "Installs Claude Code - AI-powered coding assistant CLI",
-  "documentationURL": "https://github.com/amondnet/devcontainer-features/tree/main/src/claude-code",
-  "options": {}
-}

@@ -1,8 +1,0 @@
-{
-  "id": "sdkman",
-  "version": "1.0.0",
-  "name": "SDKMAN",
-  "description": "Installs SDKMAN - Software Development Kit Manager for Java/JVM ecosystem",
-  "documentationURL": "https://github.com/amondnet/devcontainer-features/tree/main/src/sdkman",
-  "options": {}
-}

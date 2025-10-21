@@ -1,3 +1,0 @@
-[submodule ".devcontainer/features"]
-	path = .devcontainer/features
-	url = git@github.com:amondnet/devcontainer-features.git
