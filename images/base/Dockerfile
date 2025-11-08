@@ -105,6 +105,9 @@ RUN chmod +x /tmp/install-graphite.sh && \
     /bin/bash /tmp/install-graphite.sh && \
     rm /tmp/install-graphite.sh
 
+# Homebrew 설치
+RUN /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
 # 기본 쉘 설정
 ENV SHELL=/usr/bin/zsh
 SHELL ["/usr/bin/zsh", "-c"]
