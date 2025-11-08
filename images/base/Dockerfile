@@ -24,6 +24,7 @@ RUN apt-get update && \
     screen \
     lsof \
     tree \
+    git \
     git-lfs \
     postgresql-client \
     cmake \
