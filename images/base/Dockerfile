@@ -24,6 +24,7 @@ RUN apt-get update && \
     screen \
     lsof \
     tree \
+    git-lfs \
     amazon-ecr-credential-helper \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
