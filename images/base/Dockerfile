@@ -25,6 +25,7 @@ RUN apt-get update && \
     lsof \
     tree \
     git-lfs \
+    postgresql-client \
     amazon-ecr-credential-helper \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
