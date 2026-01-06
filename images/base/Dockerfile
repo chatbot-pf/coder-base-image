@@ -51,6 +51,12 @@ RUN apt-get update && apt-get install -y apt-transport-https ca-certificates gnu
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+# Dart SDK 설치
+COPY --chown=root:root scripts/install-dart.sh /tmp/install-dart.sh
+RUN chmod +x /tmp/install-dart.sh && \
+    /tmp/install-dart.sh && \
+    rm /tmp/install-dart.sh
+
 # coder 사용자의 기본 쉘 변경
 RUN chsh -s /usr/bin/zsh coder
 
