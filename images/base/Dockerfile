@@ -28,6 +28,8 @@ RUN apt-get update && \
     git-lfs \
     postgresql-client \
     cmake \
+    bubblewrap \
+    socat \
     amazon-ecr-credential-helper \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
