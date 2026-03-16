@@ -80,6 +80,12 @@ RUN chmod +x /tmp/install-root-sdk.sh && \
     /usr/bin/zsh /tmp/install-root-sdk.sh && \
     rm /tmp/install-root-sdk.sh
 
+# mise 설치
+COPY --chown=root:root scripts/install-mise.sh /tmp/install-mise.sh
+RUN chmod +x /tmp/install-mise.sh && \
+    /tmp/install-mise.sh && \
+    rm /tmp/install-mise.sh
+
 # Docker 설치
 COPY --chown=root:root scripts/install-docker.sh /tmp/install-docker.sh
 RUN chmod +x /tmp/install-docker.sh && \
