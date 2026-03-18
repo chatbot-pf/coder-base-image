@@ -1,0 +1,23 @@
+images/base/scripts/install-root-sdk.sh
+  c1698e94e9c303c0 60-64
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.15",
+  "base_commit_sha": "fb404ea562b409e1ba72b7428d63a6bdabba8f62",
+  "prompts": {
+    "c1698e94e9c303c0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c1b4351f-4a79-4e6e-bb1b-0ffbc432deb7",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Minsu Lee <amond@amond.net>",
+      "messages": [],
+      "total_additions": 6,
+      "total_deletions": 1,
+      "accepted_lines": 5,
+      "overriden_lines": 0
+    }
+  }
+}
