@@ -54,6 +54,13 @@ RUN apt-get update && apt-get install -y apt-transport-https ca-certificates gnu
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+# Infisical CLI 설치
+RUN curl -1sLf 'https://artifacts-cli.infisical.com/setup.deb.sh' | bash \
+    && apt-get update \
+    && apt-get install -y infisical \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
 # Dart SDK 설치
 COPY --chown=root:root scripts/install-dart.sh /tmp/install-dart.sh
 RUN chmod +x /tmp/install-dart.sh && \
