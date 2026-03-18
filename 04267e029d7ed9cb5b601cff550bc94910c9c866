@@ -1,0 +1,23 @@
+images/base/scripts/install-sdk.sh
+  c1698e94e9c303c0 29-31,34-36
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.15",
+  "base_commit_sha": "04267e029d7ed9cb5b601cff550bc94910c9c866",
+  "prompts": {
+    "c1698e94e9c303c0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c1b4351f-4a79-4e6e-bb1b-0ffbc432deb7",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Minsu Lee <amond@amond.net>",
+      "messages": [],
+      "total_additions": 6,
+      "total_deletions": 3,
+      "accepted_lines": 6,
+      "overriden_lines": 0
+    }
+  }
+}
