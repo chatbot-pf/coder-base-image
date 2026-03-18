@@ -57,3 +57,8 @@ tar xzf "bat-${BAT_VERSION}-x86_64-unknown-linux-musl.tar.gz"
 mv "bat-${BAT_VERSION}-x86_64-unknown-linux-musl/bat" /usr/local/bin/
 rm -rf "bat-${BAT_VERSION}-x86_64-unknown-linux-musl.tar.gz" "bat-${BAT_VERSION}-x86_64-unknown-linux-musl"
 echo "bat installed successfully."
+
+# Cubic 설치
+echo "Installing Cubic..."
+curl -fsSL https://cubic.dev/install | bash
+echo "Cubic installed successfully."
