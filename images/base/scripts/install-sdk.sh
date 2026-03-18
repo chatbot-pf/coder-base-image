@@ -26,10 +26,13 @@ eval "$(fnm env --shell zsh)"
 
 # Node.js 및 패키지 설치
 fnm install --lts
-fnm install 22
-fnm alias default 22
-fnm use 22  # 현재 세션에서 Node.js 22 활성화
+fnm install 24
+fnm alias default 24
+fnm use 24  # 현재 세션에서 Node.js 24 활성화
 alias nvm="fnm"
+
+# Global npm 패키지 설치
+npm install -g firebase-tools cdk turbo vercel @google/gemini-cli
 
 # SDKMAN 설치
 curl -s "https://get.sdkman.io" | bash
