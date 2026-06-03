@@ -14,8 +14,9 @@ images/
     └── scripts/            # 설치 스크립트 모음
         ├── install-fonts.sh       # 시스템 폰트 설치 (Root)
         ├── install-root-sdk.sh    # Root 레벨 도구 (Qodana, AWS CLI)
+        ├── install-mise.sh        # mise 버전 매니저 설치 (Root, apt)
         ├── install-docker.sh      # Docker Engine 설치 (Root)
-        ├── install-sdk.sh         # 사용자 개발 도구 (fnm, SDKMAN, etc.)
+        ├── install-sdk.sh         # 사용자 개발 도구 (mise 글로벌 런타임, Claude Code)
         ├── install-ohmyposh.sh    # Oh My Posh 프롬프트
         ├── install-brew.sh        # Homebrew 패키지 매니저
         └── install-graphite.sh    # Graphite CLI (스택 PR)
@@ -35,11 +36,12 @@ images/
 - Oh My Posh (프롬프트 테마)
 
 **개발 도구:**
-- Node.js (fnm으로 관리, LTS + v22)
-- SDKMAN (Java/JVM 도구)
-- Bun, Deno
+- mise (런타임 버전 매니저, apt로 시스템 설치)
+- Node.js (mise로 관리, 기본 24 + LTS 라인)
+- Bun, Deno (mise로 관리)
+- Java (mise로 관리, Temurin 21)
 - Claude Code CLI
-- FVM (Flutter Version Manager)
+- Flutter는 미리 굽지 않음 (필요 시 `mise use flutter@latest`)
 
 **클라우드 & DevOps:**
 - AWS CLI
@@ -83,13 +85,10 @@ images/
 
 1. **개발 SDK 설치** (`install-sdk.sh`)
    - Zimfw
-   - fnm (Fast Node Manager)
-   - Node.js (LTS + v22)
-   - SDKMAN
-   - Bun
-   - Deno
+   - mise 글로벌 런타임 고정: `mise use -g node@24 node@lts bun@latest deno@latest java@temurin-21`
+   - Global npm 패키지 (firebase-tools, cdk, turbo, vercel, gemini-cli)
    - Claude Code CLI
-   - FVM
+   - `.zshrc`에 mise 활성화(`mise activate zsh`) 추가
 
 2. **프롬프트 설정** (`install-ohmyposh.sh`)
    - Oh My Posh 공식 설치 스크립트 사용
@@ -183,15 +182,19 @@ Docker Engine 설치:
 
 사용자 개발 도구 설치:
 - **Zimfw**: Zsh 플러그인 매니저
-- **fnm**: Fast Node Manager (nvm 대체)
-  - Node.js LTS
-  - Node.js v22
-  - `alias nvm="fnm"` 호환성 설정
-- **SDKMAN**: Java/JVM 도구 매니저
-- **Bun**: JavaScript 런타임
-- **Deno**: JavaScript/TypeScript 런타임
+- **mise 글로벌 런타임**: `mise use -g`로 선언적 고정
+  - `node@24`(기본) + `node@lts`
+  - `bun@latest`
+  - `deno@latest`
+  - `java@temurin-21`
+  - Flutter는 미리 설치하지 않음 (필요 시 `mise use flutter@latest`)
+- **Global npm 패키지**: firebase-tools, cdk, turbo, vercel, @google/gemini-cli
 - **Claude Code CLI**: Claude AI CLI 도구
-- **FVM**: Flutter Version Manager
+- **.zshrc 활성화**: `eval "$(mise activate zsh)"`
+
+> 빌드(비대화형 셸) 중에는 `~/.local/share/mise/shims`를 PATH에 추가해
+> mise가 관리하는 node/npm 등을 사용하며, npm 전역 설치 후 `mise reshim`으로
+> 새 실행파일(turbo, vercel, gt 등) shim을 생성한다.
 
 #### install-ohmyposh.sh (Coder User)
 
@@ -209,9 +212,9 @@ Homebrew 패키지 매니저:
 #### install-graphite.sh (Coder User)
 
 Graphite CLI 설치:
-- Homebrew를 통해 설치
+- npm으로 설치 (`@withgraphite/graphite-cli@stable`)
 - 스택 PR 관리 도구
-- **중요**: Homebrew가 먼저 설치되어야 함
+- **중요**: mise가 관리하는 node(`install-sdk.sh`)가 먼저 설치되어야 함 (shims로 npm 사용)
 
 ## 중요 사항
 
@@ -227,22 +230,28 @@ Graphite CLI 설치:
 5. Root SDK (`install-root-sdk.sh`)
 6. Docker (`install-docker.sh`)
 
+**Root Phase (mise):** Docker 직전에 mise 바이너리를 apt로 시스템 설치 (`install-mise.sh`)
+
 **Coder User Phase:**
-1. SDK (`install-sdk.sh`) - fnm, SDKMAN, Bun, Deno, Claude Code, FVM
+1. SDK (`install-sdk.sh`) - mise 글로벌 런타임(node/bun/deno/java), npm 전역 패키지, Claude Code
 2. Oh My Posh (`install-ohmyposh.sh`)
-3. Homebrew (`install-brew.sh`)
-4. Graphite (`install-graphite.sh`) - Homebrew 필요
+3. Graphite (`install-graphite.sh`) - mise node(npm) 필요
+4. Homebrew
 
 ### 사용자 컨텍스트
 
 - **Root 스크립트**: 시스템 레벨 도구, 폰트, Docker
 - **Coder 스크립트**: 개발 도구, 사용자 설정
 
-### Node.js 관리
+### 런타임 버전 관리 (mise)
 
-- **fnm 사용** (nvm 아님)
-- `nvm` 명령은 `fnm` alias로 제공
-- LTS 및 v22 버전 자동 설치
+- **mise 사용** (fnm/SDKMAN/FVM 대체)
+- 글로벌 기본값은 `~/.config/mise/config.toml`에 고정 (`mise use -g`)
+- 기본 런타임: `node@24`(+`node@lts`), `bun@latest`, `deno@latest`, `java@temurin-21`
+- 대화형 셸: `.zshrc`의 `eval "$(mise activate zsh)"`로 활성화
+- 비대화형 셸(docker exec, CI): `~/.local/share/mise/shims`로 해석
+- 프로젝트별 오버라이드: 저장소 루트의 `mise.toml` 또는 `.tool-versions`
+- Flutter는 미리 굽지 않음 → `mise use flutter@latest`로 온디맨드 설치
 
 ### Docker
 

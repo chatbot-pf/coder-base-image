@@ -5,53 +5,43 @@ set -e
 ZIM_HOME=${HOME}/.zim
 curl -fsSL https://raw.githubusercontent.com/zimfw/install/master/install.zsh | zsh
 
+# ─────────────────────────────────────────────────────────────
+# mise: 런타임 글로벌 버전 관리
+#   mise 바이너리는 install-mise.sh(root, apt)에서 이미 설치됨.
+#   여기서는 coder 사용자의 글로벌 기본 버전을 선언적으로 고정한다.
+#   (config: ~/.config/mise/config.toml)
+# ─────────────────────────────────────────────────────────────
+export PATH="$HOME/.local/bin:$PATH"
 
-# NVM 설치 및 설정
-# curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
-# export NVM_DIR="$HOME/.nvm"
-# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+# 글로벌 기본 런타임 설치 (node 기본값 24, LTS 라인도 함께 유지)
+mise use -g node@24 node@lts
+mise use -g bun@latest
+mise use -g deno@latest
+mise use -g java@temurin-21
 
-# Node.js 및 패키지 설치
-# nvm install --lts
-# nvm install 22
-# nvm alias default 22
+# Flutter는 SDK 크기(아티팩트 포함 ~2GB+)가 커서 이미지에 굽지 않는다.
+# 필요 시 사용자가: mise use flutter@latest
 
-# fnm 설치
-curl -fsSL https://fnm.vercel.app/install | bash
+# 빌드 단계(비대화형 셸)에서 도구를 즉시 사용하기 위해 shims를 PATH에 추가
+export PATH="$HOME/.local/share/mise/shims:$PATH"
 
-# fnm 환경 설정 (즉시 사용을 위해)
-export FNM_PATH="$HOME/.local/share/fnm"
-export PATH="$FNM_PATH:$PATH"
-eval "$(fnm env --shell zsh)"
-
-# Node.js 및 패키지 설치
-fnm install --lts
-fnm install 24
-fnm alias default 24
-fnm use 24  # 현재 세션에서 Node.js 24 활성화
-alias nvm="fnm"
-
-# Global npm 패키지 설치
+# Global npm 패키지 설치 (mise가 관리하는 node 사용)
 npm install -g firebase-tools cdk turbo vercel @google/gemini-cli
-
-# SDKMAN 설치
-curl -s "https://get.sdkman.io" | bash
-source "$HOME/.sdkman/bin/sdkman-init.sh"
-
-# bun 설치
-curl -fsSL https://bun.com/install | bash
-
-# Deno 설치
-curl -fsSL https://deno.land/install.sh | sh -s -- --yes
 
 # Claude Code 설치
 echo "Installing Claude Code..."
 curl -fsSL https://claude.ai/install.sh | bash
 
-# FVM 설치
-curl -fsSL https://fvm.app/install.sh | bash
+# npm 전역 실행파일 및 새 도구에 대한 shim 재생성
+mise reshim
 
-# PATH에 Claude Code 추가 (zshrc에 추가)
+# ─────────────────────────────────────────────────────────────
+# .zshrc 설정
+# ─────────────────────────────────────────────────────────────
+# mise 활성화 (대화형 셸용)
+echo 'eval "$(mise activate zsh)"' >> ~/.zshrc
+
+# PATH에 Claude Code(~/.local/bin) 추가
 echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc
 
 # Dart pub global 패키지 PATH 추가
