@@ -6,9 +6,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is a Docker base image for Coder workspaces, built on top of `codercom/enterprise-base:ubuntu`. It provides a comprehensive development environment with:
 - Zsh shell with Zimfw framework and Oh My Posh prompt
-- Node.js (via fnm) with LTS and version 22
-- SDKMAN for Java/JVM ecosystem tools
-- Bun, Deno, and Claude Code CLI
+- Runtimes managed by mise (Node.js, Bun, Deno, Java) with pinned global defaults
+- Java (Temurin 21) via mise
+- Claude Code CLI
 - Docker with coder user in docker group
 - Homebrew package manager
 - Graphite CLI for stacked PRs
@@ -65,7 +65,10 @@ GitHub Actions workflow at `.github/workflows/docker-publish.yml`:
 
 ## Important Notes
 
-- Node.js is managed via fnm (not nvm) with alias `nvm="fnm"` for compatibility
+- Runtimes (Node.js, Bun, Deno, Java) are managed by mise; global defaults are pinned in `~/.config/mise/config.toml` via `mise use -g` in `install-sdk.sh`
+- mise binary is installed system-wide via apt (`install-mise.sh`, root phase); per-user tools install under `~/.local/share/mise`
+- mise is activated in `.zshrc` (`eval "$(mise activate zsh)"`); non-interactive shells resolve tools through `~/.local/share/mise/shims`
+- Flutter is NOT pre-baked (mise can install on demand: `mise use flutter@latest`)
 - Homebrew is installed for coder user at `/home/linuxbrew/.linuxbrew/`
 - Oh My Posh is installed via official script (not Homebrew) to `~/.local/bin`
 - Docker daemon must be started separately in Coder workspaces
