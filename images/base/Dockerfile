@@ -105,6 +105,12 @@ RUN chmod +x /tmp/install-docker.sh && \
 # coder 사용자를 docker 그룹에 추가
 RUN usermod -aG docker coder
 
+# Orca headless server 설치
+COPY --chown=root:root scripts/install-orca.sh /tmp/install-orca.sh
+RUN chmod +x /tmp/install-orca.sh && \
+    /tmp/install-orca.sh && \
+    rm /tmp/install-orca.sh
+
 
 # coder 사용자로 전환
 USER coder

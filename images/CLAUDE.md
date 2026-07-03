@@ -16,6 +16,7 @@ images/
         ├── install-root-sdk.sh    # Root 레벨 도구 (Qodana, AWS CLI)
         ├── install-mise.sh        # mise 버전 매니저 설치 (Root, apt)
         ├── install-docker.sh      # Docker Engine 설치 (Root)
+        ├── install-orca.sh        # Orca headless server (Root)
         ├── install-sdk.sh         # 사용자 개발 도구 (mise 글로벌 런타임, Claude Code)
         ├── install-ohmyposh.sh    # Oh My Posh 프롬프트
         ├── install-brew.sh        # Homebrew 패키지 매니저
@@ -80,6 +81,11 @@ images/
 5. **Docker 설치**
    - Docker Engine 설치
    - coder 사용자를 docker 그룹에 추가
+
+6. **Orca headless server 설치** (`install-orca.sh`)
+   - Xvfb 및 Electron 런타임 라이브러리
+   - Orca AppImage를 `/opt/orca/squashfs-root`에 추출 설치 (컨테이너에 FUSE 없음)
+   - `orca-server` wrapper (`/usr/local/bin`)
 
 #### Phase 2: Coder 사용자 설정
 
@@ -178,6 +184,18 @@ Docker Engine 설치:
 - Docker CE, CLI, containerd 설치
 - coder 사용자는 Dockerfile에서 별도로 docker 그룹 추가
 
+#### install-orca.sh (Root)
+
+Orca headless server 설치 ([가이드](https://github.com/amondnet/orca/blob/main/docs/reference/headless-linux-server.md)):
+- Xvfb + Electron 런타임 라이브러리 (libnss3, libgtk-3-0, libgbm1 등)
+- AppImage를 빌드 시점에 `--appimage-extract`로 `/opt/orca/squashfs-root`에 추출
+  (컨테이너에는 FUSE가 없어 AppImage 직접 실행 불가)
+- `/usr/local/bin/orca-server` wrapper 제공
+  - `APPDIR`, `LIBGL_ALWAYS_SOFTWARE=1` 설정
+  - `ELECTRON_DISABLE_SANDBOX=1` 기본값 (컨테이너 seccomp이 sandbox namespace 차단)
+- **실행은 Coder 템플릿 담당**: `orca-server serve --port 6768 --pairing-address <주소>`를
+  startup script에서 기동 (systemd 없음, `--pairing-address`는 워크스페이스별 상이)
+
 #### install-sdk.sh (Coder User)
 
 사용자 개발 도구 설치:
@@ -229,6 +247,7 @@ Graphite CLI 설치:
 4. 폰트 (`install-fonts.sh`)
 5. Root SDK (`install-root-sdk.sh`)
 6. Docker (`install-docker.sh`)
+7. Orca (`install-orca.sh`)
 
 **Root Phase (mise):** Docker 직전에 mise 바이너리를 apt로 시스템 설치 (`install-mise.sh`)
 
