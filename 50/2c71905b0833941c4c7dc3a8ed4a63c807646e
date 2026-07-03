@@ -1,0 +1,30 @@
+images/base/scripts/install-orca.sh
+  s_926e66464da1ab::t_c656e9564ef7f5 32-33
+  s_926e66464da1ab::t_93db239a84ac72 34-36
+  s_926e66464da1ab::t_bb6124bdf2e4db 1-31,37-43
+CLAUDE.md
+  s_926e66464da1ab::t_e4ceebb401d076 16
+images/base/Dockerfile
+  s_926e66464da1ab::t_54afba496eada4 108-113
+images/CLAUDE.md
+  s_926e66464da1ab::t_07225dda3f899d 247
+  s_926e66464da1ab::t_c61a20f89823e1 83-87
+  s_926e66464da1ab::t_08ca2284fe8038 18
+  s_926e66464da1ab::t_1312da583809b6 188-199
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "502c71905b0833941c4c7dc3a8ed4a63c807646e",
+  "prompts": {},
+  "sessions": {
+    "s_926e66464da1ab": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9be78b6d-c5db-4310-8543-a2b49e6aac3d",
+        "model": "claude-fable-5"
+      },
+      "human_author": "Minsu Lee <minsu.lee@passionfactory.ai>"
+    }
+  }
+}
