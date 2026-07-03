@@ -1,0 +1,19 @@
+docs/orca-server.md
+  s_926e66464da1ab::t_74711de2b2b953 1-89
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "2d0bbf087194b1e822ce5304c5108f139247695b",
+  "prompts": {},
+  "sessions": {
+    "s_926e66464da1ab": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9be78b6d-c5db-4310-8543-a2b49e6aac3d",
+        "model": "claude-fable-5"
+      },
+      "human_author": "Minsu Lee <minsu.lee@passionfactory.ai>"
+    }
+  }
+}
