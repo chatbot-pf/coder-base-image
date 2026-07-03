@@ -10,10 +10,58 @@
 
 - `orca-server serve`는 포그라운드 프로세스로 실행되며 pairing URL을 출력합니다.
 - `--pairing-address`는 **Orca 클라이언트(노트북/모바일)가 도달할 수 있는 주소**여야 합니다.
-- Coder wildcard access URL이 설정된 배포에서는 서브도메인 앱 주소를 사용합니다:
-  `{app-slug}--{agent-name}--{workspace-name}--{username}.{wildcard-domain}`
+- 접속 방식 선택:
+  1. **Docker provider + VPN** — 호스트 포트 publish. 가장 깔끔 (아래 권장 섹션)
+  2. **서브도메인 앱** — wildcard access URL 필요. 모바일/팀 공유용이나 `share` 설정 유의
+  3. **coder port-forward** — 개인 데스크톱 용도의 최소 구성
 
-## 템플릿 예제
+## Docker provider + VPN (권장)
+
+워크스페이스가 Docker provider로 사내 호스트에 뜨고, 클라이언트가 VPN으로 그 호스트에
+접근 가능한 경우 — 컨테이너 포트를 호스트에 publish하면 Coder 프록시를 거치지 않고
+VPN 안에서 직접 접속됩니다. `share` 옵션 고민이 사라지는 가장 깔끔한 구성입니다.
+
+컨테이너 IP(예: `172.18.0.2`)는 호스트 밖으로 라우팅되지 않으므로 반드시 포트 publish가
+필요합니다. 워크스페이스마다 포트가 겹치지 않도록 workspace ID에서 결정적으로 유도합니다
+(재시작해도 동일 포트 유지):
+
+```hcl
+variable "docker_host_ip" {
+  description = "VPN에서 접근 가능한 Docker 호스트 IP"
+  type        = string
+}
+
+locals {
+  # workspace ID 기반 결정적 포트 (30000–34095, 워크스페이스가 많으면 충돌 가능성 유의)
+  orca_port = 30000 + parseint(substr(md5(data.coder_workspace.me.id), 0, 3), 16)
+}
+
+resource "coder_agent" "main" {
+  # ... 기존 설정 ...
+
+  startup_script = <<-EOT
+    nohup orca-server serve \
+      --port ${local.orca_port} \
+      --pairing-address "${var.docker_host_ip}" \
+      > /tmp/orca-server.log 2>&1 &
+  EOT
+}
+
+resource "docker_container" "workspace" {
+  # ... 기존 설정 ...
+
+  # 내부/외부 포트를 동일하게 맞춰 pairing URL의 포트가 그대로 유효하도록 함
+  ports {
+    internal = local.orca_port
+    external = local.orca_port
+  }
+}
+```
+
+클라이언트에서는 `/tmp/orca-server.log`에 출력된 pairing URL로 접속하면 됩니다
+(주소는 `docker_host_ip:orca_port`).
+
+## 대안: 서브도메인 앱 (wildcard access URL)
 
 ```hcl
 variable "wildcard_domain" {
@@ -57,7 +105,7 @@ resource "coder_app" "orca" {
   grep -m1 "pairing" /tmp/orca-server.log
   ```
 
-## share 옵션 선택
+### share 옵션 선택
 
 | 값 | 접속 가능 대상 | 비고 |
 |---|---|---|
@@ -86,4 +134,4 @@ coder port-forward <workspace> --tcp 6768:6768
   privileged 환경에서 sandbox를 켜려면 `ELECTRON_DISABLE_SANDBOX= orca-server serve ...`.
 - **dbus 에러 로그**: headless 컨테이너에서 무해한 노이즈.
 - **클라이언트 연결 실패**: `--pairing-address`가 클라이언트에서 도달 가능한지,
-  `coder_app`의 `share` 설정이 클라이언트 인증 방식과 맞는지 확인.
+  포트 publish 또는 `coder_app`의 `share` 설정이 클라이언트 인증 방식과 맞는지 확인.
