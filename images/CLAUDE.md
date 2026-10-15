@@ -20,7 +20,8 @@ images/
         ├── install-sdk.sh         # 사용자 개발 도구 (mise 글로벌 런타임, Claude Code)
         ├── install-prompt.sh      # Zimfw 모듈 + Powerlevel10k 프롬프트
         ├── install-brew.sh        # Homebrew 패키지 매니저
-        └── install-graphite.sh    # Graphite CLI (스택 PR)
+        ├── install-graphite.sh    # Graphite CLI (스택 PR)
+        └── install-gh-extensions.sh # GitHub CLI 확장 (gh-stack, gh-actions-lock)
 ```
 
 ## base/ 이미지
@@ -53,6 +54,7 @@ images/
 **기타:**
 - Homebrew 패키지 매니저
 - Graphite CLI (스택 PR 관리)
+- GitHub CLI 확장: `gh stack`(GitHub 네이티브 stacked PR), `gh actions-lock`(Actions 의존성 lock·검증)
 - 커스텀 Nerd Fonts (MesloLGS NF, JetBrainsMono, D2Coding)
 - Qodana CLI
 
@@ -238,6 +240,17 @@ Graphite CLI 설치:
 - 스택 PR 관리 도구
 - **중요**: mise가 관리하는 node(`install-sdk.sh`)가 먼저 설치되어야 함 (shims로 npm 사용)
 
+#### install-gh-extensions.sh (Coder User)
+
+GitHub CLI 확장 설치:
+- `gh extension install github/gh-stack`, `gh extension install github/gh-actions-lock`
+- 설치 위치: `~/.local/share/gh/extensions/`
+- 공개 저장소라 인증 없이 설치되지만, 비인증 API rate limit(IP당 시간당 60회)을 피하려고
+  CI는 `GITHUB_TOKEN`을 BuildKit secret(`gh_token`)으로 넘긴다. secret은 해당 `RUN`에만
+  마운트되고 이미지 레이어에는 남지 않는다. 로컬 빌드에서는 생략해도 된다
+  (`docker build --secret id=gh_token,env=GH_TOKEN ...`로 넘길 수도 있다)
+- `gh extension list`는 인증이 필요하므로 설치 확인은 각 확장을 직접 실행해서 한다
+
 ## 중요 사항
 
 ### 실행 순서
@@ -259,7 +272,8 @@ Graphite CLI 설치:
 1. SDK (`install-sdk.sh`) - mise 글로벌 런타임(node/bun/deno/java), npm 전역 패키지, Claude Code
 2. 프롬프트 (`install-prompt.sh`) - Zimfw 설치 이후
 3. Graphite (`install-graphite.sh`) - mise node(npm) 필요
-4. Homebrew
+4. GitHub CLI 확장 (`install-gh-extensions.sh`) - root 단계의 GitHub CLI 필요
+5. Homebrew
 
 ### 사용자 컨텍스트
 

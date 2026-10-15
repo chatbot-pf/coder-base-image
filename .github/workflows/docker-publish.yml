@@ -101,6 +101,9 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          # gh extension install의 비인증 API rate limit 회피용 (이미지 레이어에는 남지 않음)
+          secrets: |
+            gh_token=${{ secrets.GITHUB_TOKEN }}
 
       # Sign the resulting Docker image digest except on PRs.
       # This will only write to the public Rekor transparency log when the Docker

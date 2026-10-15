@@ -12,6 +12,7 @@ This is a Docker base image for Coder workspaces, built on top of `codercom/ente
 - Docker with coder user in docker group
 - Homebrew package manager
 - Graphite CLI for stacked PRs
+- GitHub CLI extensions: `gh stack` (github/gh-stack) and `gh actions-lock` (github/gh-actions-lock)
 - AWS CLI, Google Cloud CLI, and Qodana CLI
 - Orca headless server (`orca-server` wrapper; launch via Coder template startup script)
 - Custom Nerd Fonts for terminal display
@@ -52,7 +53,7 @@ The repository uses a two-phase Docker build with clear separation between root 
 
 **Build Phases:**
 - **Phase 1 (Root)**: System packages, CLI tools (gh, gcloud), fonts, Docker, root-level tools
-- **Phase 2 (Coder User)**: Development SDKs, Zimfw modules + Powerlevel10k prompt, Homebrew, Graphite CLI
+- **Phase 2 (Coder User)**: Development SDKs, Zimfw modules + Powerlevel10k prompt, Homebrew, Graphite CLI, GitHub CLI extensions
 
 **For detailed build phases, script organization, and configuration files, see [images/CLAUDE.md](images/CLAUDE.md)**
 
