@@ -17,14 +17,14 @@ if [ -s /run/secrets/gh_token ]; then
 fi
 
 # gh-stack: GitHub 네이티브 stacked PR / gh-actions-lock: Actions 의존성 lock·검증
-gh extension install github/gh-stack
-gh extension install github/gh-actions-lock
+gh extension install github/gh-stack || { echo "❌ Failed to install github/gh-stack" >&2; exit 1; }
+gh extension install github/gh-actions-lock || { echo "❌ Failed to install github/gh-actions-lock" >&2; exit 1; }
 
 # 설치 확인 (`gh extension list`는 인증이 필요하므로 각 확장을 직접 실행한다)
 if gh stack --version &> /dev/null && gh actions-lock --help &> /dev/null; then
     echo "✅ GitHub CLI extensions installation completed!"
     gh stack --version
 else
-    echo "❌ GitHub CLI extensions installation failed!"
+    echo "❌ GitHub CLI extensions verification failed!" >&2
     exit 1
 fi
