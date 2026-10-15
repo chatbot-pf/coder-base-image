@@ -3,6 +3,12 @@ set -e
 
 echo "🧩 Installing GitHub CLI extensions..."
 
+# gh는 root 단계의 apt 설치에 의존한다 — 없으면 원인을 바로 알리고 중단한다
+if ! command -v gh &> /dev/null; then
+    echo "❌ GitHub CLI (gh) not found; the root-phase GitHub CLI install must run first" >&2
+    exit 1
+fi
+
 # 공개 저장소의 확장은 인증 없이 설치되지만, 비인증 API는 IP당 시간당 60회로 제한된다.
 # CI는 BuildKit secret(gh_token)으로 토큰을 넘겨 공유 러너 IP의 rate limit을 피한다.
 if [ -s /run/secrets/gh_token ]; then
