@@ -22,6 +22,7 @@ A comprehensive Docker base image for [Coder](https://coder.com/) workspaces, bu
 - **Docker**: Containerization with coder user in docker group
 - **Homebrew**: Package manager for Linux
 - **Graphite CLI**: Stacked pull request workflow
+- **GitHub CLI extensions**: `gh stack` (native stacked PRs) and `gh actions-lock` (lock and verify GitHub Actions dependencies)
 - **GitHub CLI (gh)**: GitHub operations from terminal
 - **AWS CLI**: Amazon Web Services command line interface
 - **Qodana CLI**: JetBrains code quality platform
@@ -105,6 +106,7 @@ All installation scripts are located in the `scripts/` directory:
 | `install-prompt.sh` | Zimfw modules (`.zimrc`), Powerlevel10k prompt, Orca history | coder |
 | `install-brew.sh` | Homebrew package manager | coder |
 | `install-graphite.sh` | Graphite CLI | coder |
+| `install-gh-extensions.sh` | GitHub CLI extensions (gh-stack, gh-actions-lock) | coder |
 
 ## Customization
 

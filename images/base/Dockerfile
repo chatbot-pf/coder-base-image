@@ -137,6 +137,14 @@ RUN chmod +x /tmp/install-graphite.sh && \
     /bin/bash /tmp/install-graphite.sh && \
     rm /tmp/install-graphite.sh
 
+# GitHub CLI 확장 설치 (gh-stack, gh-actions-lock)
+# gh_token secret은 선택 사항 — 없으면 비인증으로 설치한다
+COPY --chown=coder:coder scripts/install-gh-extensions.sh /tmp/install-gh-extensions.sh
+RUN --mount=type=secret,id=gh_token,mode=0444 \
+    chmod +x /tmp/install-gh-extensions.sh && \
+    /bin/bash /tmp/install-gh-extensions.sh && \
+    rm /tmp/install-gh-extensions.sh
+
 # Homebrew 설치
 RUN /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
