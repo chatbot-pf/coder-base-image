@@ -124,11 +124,12 @@ RUN chmod +x /tmp/install-sdk.sh && \
     /usr/bin/zsh /tmp/install-sdk.sh && \
     rm /tmp/install-sdk.sh
 
-# Oh My Posh 설치
-COPY --chown=coder:coder scripts/install-ohmyposh.sh /tmp/install-ohmyposh.sh
-RUN chmod +x /tmp/install-ohmyposh.sh && \
-    /bin/bash /tmp/install-ohmyposh.sh && \
-    rm /tmp/install-ohmyposh.sh
+# Zimfw 모듈 및 Powerlevel10k 프롬프트 설정
+COPY --chown=coder:coder .zimrc .p10k.zsh /tmp/
+COPY --chown=coder:coder scripts/install-prompt.sh /tmp/install-prompt.sh
+RUN chmod +x /tmp/install-prompt.sh && \
+    /usr/bin/zsh /tmp/install-prompt.sh && \
+    rm /tmp/install-prompt.sh /tmp/.zimrc /tmp/.p10k.zsh
 
 # Graphite CLI 설치 (npm 사용)
 COPY --chown=coder:coder scripts/install-graphite.sh /tmp/install-graphite.sh

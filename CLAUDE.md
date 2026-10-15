@@ -5,7 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Repository Overview
 
 This is a Docker base image for Coder workspaces, built on top of `codercom/enterprise-base:ubuntu`. It provides a comprehensive development environment with:
-- Zsh shell with Zimfw framework and Oh My Posh prompt
+- Zsh shell with Zimfw framework and Powerlevel10k prompt (Catppuccin lean/mocha theme)
 - Runtimes managed by mise (Node.js, Bun, Deno, Java) with pinned global defaults
 - Java (Temurin 21) via mise
 - Claude Code CLI
@@ -52,7 +52,7 @@ The repository uses a two-phase Docker build with clear separation between root 
 
 **Build Phases:**
 - **Phase 1 (Root)**: System packages, CLI tools (gh, gcloud), fonts, Docker, root-level tools
-- **Phase 2 (Coder User)**: Development SDKs, Oh My Posh, Homebrew, Graphite CLI
+- **Phase 2 (Coder User)**: Development SDKs, Zimfw modules + Powerlevel10k prompt, Homebrew, Graphite CLI
 
 **For detailed build phases, script organization, and configuration files, see [images/CLAUDE.md](images/CLAUDE.md)**
 
@@ -71,7 +71,9 @@ GitHub Actions workflow at `.github/workflows/docker-publish.yml`:
 - mise is activated in `.zshrc` (`eval "$(mise activate zsh)"`); non-interactive shells resolve tools through `~/.local/share/mise/shims`
 - Flutter is NOT pre-baked (mise can install on demand: `mise use flutter@latest`)
 - Homebrew is installed for coder user at `/home/linuxbrew/.linuxbrew/`
-- Oh My Posh is installed via official script (not Homebrew) to `~/.local/bin`
+- Powerlevel10k and the Catppuccin theme are Zimfw modules declared in `images/base/.zimrc`; `install-prompt.sh` overwrites the Zimfw installer's default `.zimrc` with it and installs the modules
+- `~/.p10k.zsh` is an override-only file layered on top of the Catppuccin theme selected via `zstyle ':catppuccin:p10k'`
+- `.zshrc` reloads the Orca per-workspace `HISTFILE` (only when `ORCA_WORKSPACE_ID` is set) so past commands show up in history search and autosuggestions
 - Docker daemon must be started separately in Coder workspaces
 - All user scripts run as coder user, root scripts run as root
 - Scripts are copied to `/tmp/` and deleted after execution to minimize image size

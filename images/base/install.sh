@@ -97,6 +97,3 @@ cp .zimrc ~/
 zimfw install
 
 add_header_block
-add_to_zshrc "on-my-posh" '
-eval "$(oh-my-posh init zsh)"
-'
