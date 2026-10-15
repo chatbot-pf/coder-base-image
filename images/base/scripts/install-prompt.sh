@@ -53,9 +53,12 @@ cat >> ~/.zshrc <<'EOF'
 if [[ -n $ORCA_WORKSPACE_ID ]]; then
   autoload -Uz add-zsh-hook
   _orca_load_histfile() {
-    [[ $HISTFILE == $_orca_loaded_histfile ]] && return
+    [[ "$HISTFILE" == "$_orca_loaded_histfile" ]] && return
+    # 아직 파일이 없으면 다음 프롬프트에서 다시 시도한다. 이 세션이 쓴 명령을
+    # 다시 읽게 되어도 Zimfw environment 모듈의 HIST_IGNORE_ALL_DUPS가 중복을 없앤다.
+    [[ -r "$HISTFILE" ]] || return 0
     _orca_loaded_histfile=$HISTFILE
-    fc -R $HISTFILE 2>/dev/null
+    fc -R "$HISTFILE" 2>/dev/null
   }
   add-zsh-hook precmd _orca_load_histfile
 fi
