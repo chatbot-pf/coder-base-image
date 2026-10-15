@@ -16,6 +16,9 @@ source ${ZIM_HOME}/zimfw.zsh install -q
 
 # Powerlevel10k instant prompt와 테마 선택은 .zshrc 맨 앞에 둔다.
 # instant prompt 블록보다 위에서는 표준 입출력에 접근하는 코드를 두지 않는다.
+# ~/.zshrc(Zimfw 초기화 포함)는 install-sdk.sh가 만든다. 없으면 테마가 로드되지 않는
+# .zshrc가 만들어지므로 빌드를 멈춘다.
+[[ -f ~/.zshrc ]] || { echo "❌ ~/.zshrc not found; install-sdk.sh (Zimfw) must run first" >&2; exit 1; }
 {
     cat <<'EOF'
 # Powerlevel10k instant prompt. 초기화가 끝나기 전에 캐시된 프롬프트를 먼저 그린다.
