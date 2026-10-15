@@ -51,6 +51,8 @@ cat >> ~/.zshrc <<'EOF'
 # search(메모리 history를 검색)에 안 잡힌다. Orca가 HISTFILE을 바꾼 직후 그 파일을
 # 한 번 fc -R로 읽어들여 과거 history를 복원한다.
 if [[ -n $ORCA_WORKSPACE_ID ]]; then
+  # .zshrc를 다시 source해도 이미 로드한 파일을 다시 읽지 않도록 기존 값을 유지한다.
+  typeset -g _orca_loaded_histfile="${_orca_loaded_histfile-}"
   autoload -Uz add-zsh-hook
   _orca_load_histfile() {
     [[ "$HISTFILE" == "$_orca_loaded_histfile" ]] && return
