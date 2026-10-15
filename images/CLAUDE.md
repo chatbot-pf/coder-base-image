@@ -18,7 +18,7 @@ images/
         ├── install-docker.sh      # Docker Engine 설치 (Root)
         ├── install-orca.sh        # Orca headless server (Root)
         ├── install-sdk.sh         # 사용자 개발 도구 (mise 글로벌 런타임, Claude Code)
-        ├── install-ohmyposh.sh    # Oh My Posh 프롬프트
+        ├── install-prompt.sh      # Zimfw 모듈 + Powerlevel10k 프롬프트
         ├── install-brew.sh        # Homebrew 패키지 매니저
         └── install-graphite.sh    # Graphite CLI (스택 PR)
 ```
@@ -34,7 +34,7 @@ images/
 **쉘 및 프롬프트:**
 - Zsh (기본 쉘)
 - Zimfw (Zsh 플러그인 관리자)
-- Oh My Posh (프롬프트 테마)
+- Powerlevel10k (프롬프트, Catppuccin lean/mocha 테마)
 
 **개발 도구:**
 - mise (런타임 버전 매니저, apt로 시스템 설치)
@@ -96,9 +96,10 @@ images/
    - Claude Code CLI
    - `.zshrc`에 mise 활성화(`mise activate zsh`) 추가
 
-2. **프롬프트 설정** (`install-ohmyposh.sh`)
-   - Oh My Posh 공식 설치 스크립트 사용
-   - `~/.local/bin`에 설치 (Homebrew 불필요)
+2. **프롬프트 설정** (`install-prompt.sh`)
+   - 저장소의 `.zimrc`로 덮어쓴 뒤 Zimfw 모듈 설치 (Powerlevel10k, Catppuccin 테마 포함)
+   - `.zshrc` 맨 앞에 p10k instant prompt와 Catppuccin 테마 선택 추가
+   - `.zshrc` 끝에 `~/.p10k.zsh` 로드와 Orca HISTFILE 재로딩 추가
 
 3. **패키지 매니저** (`install-brew.sh`)
    - Homebrew 설치 (`/home/linuxbrew/.linuxbrew/`)
@@ -125,7 +126,6 @@ Zimfw 초기화 및 zshrc 설정을 관리하는 메인 스크립트:
 - `update_zshrc_block()`: 기존 블록 업데이트 또는 새로 추가
 - `add_header_block()`: Coder 설정 헤더 블록 추가
 - Zimfw 모듈 설치
-- Oh My Posh 초기화 설정
 
 **마커 시스템:**
 ```bash
@@ -141,6 +141,7 @@ Zimfw 초기화 및 zshrc 설정을 관리하는 메인 스크립트:
 Zsh 환경 변수 파일:
 - `skip_global_compinit=1` 설정으로 글로벌 compinit 스킵
 - 쉘 시작 속도 최적화
+- `~/.local/share/mise/shims`를 PATH 앞에 추가해 비대화형 셸에서도 mise 도구 사용
 
 #### .zimrc
 
@@ -214,12 +215,15 @@ Orca headless server 설치 ([가이드](https://github.com/amondnet/orca/blob/m
 > mise가 관리하는 node/npm 등을 사용하며, npm 전역 설치 후 `mise reshim`으로
 > 새 실행파일(turbo, vercel, gt 등) shim을 생성한다.
 
-#### install-ohmyposh.sh (Coder User)
+#### install-prompt.sh (Coder User)
 
-Oh My Posh 설치:
-- 공식 설치 스크립트 사용 (Homebrew 불필요)
-- 설치 위치: `~/.local/bin`
-- bash로 실행 (공식 스크립트 요구사항)
+Zimfw 모듈 구성과 Powerlevel10k 프롬프트 설정:
+- `install-sdk.sh`가 Zimfw를 설치한 **뒤에** 실행해야 함. Zimfw 설치 스크립트는 기존
+  `.zimrc` 앞에 기본 템플릿을 덧붙이므로, 설치 후 저장소의 `.zimrc`로 덮어쓰고 모듈을 설치한다
+- 테마는 `zstyle ':catppuccin:p10k'`(lean/mocha)로 선택하고, `~/.p10k.zsh`는 추가 override 전용
+- Orca가 워크스페이스별로 바꾸는 `HISTFILE`을 `fc -R`로 다시 읽어 과거 history를 복원
+  (`ORCA_WORKSPACE_ID`가 있을 때만 동작)
+- 클라이언트 터미널에 Nerd Font가 필요
 
 #### install-brew.sh (Coder User)
 
@@ -253,7 +257,7 @@ Graphite CLI 설치:
 
 **Coder User Phase:**
 1. SDK (`install-sdk.sh`) - mise 글로벌 런타임(node/bun/deno/java), npm 전역 패키지, Claude Code
-2. Oh My Posh (`install-ohmyposh.sh`)
+2. 프롬프트 (`install-prompt.sh`) - Zimfw 설치 이후
 3. Graphite (`install-graphite.sh`) - mise node(npm) 필요
 4. Homebrew
 

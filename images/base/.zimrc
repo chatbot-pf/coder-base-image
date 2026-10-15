@@ -30,6 +30,12 @@ zmodule utility
 # A heavily reduced, ASCII-only version of the Spaceship and Starship prompts.
 # zmodule asciiship
 
+# Powerlevel10k. zsh 함수로 동작하고 git 상태는 gitstatusd 데몬에 비동기로 물어
+# 프롬프트를 블록하지 않는다.
+zmodule romkatv/powerlevel10k
+# Catppuccin 테마 (zstyle로 theme/flavour 선택, .zshrc에서 선언)
+zmodule tolkonepiu/catppuccin-powerlevel10k-themes
+
 #
 # Completion
 #

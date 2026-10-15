@@ -6,7 +6,7 @@ A comprehensive Docker base image for [Coder](https://coder.com/) workspaces, bu
 
 ### Shell Environment
 - **Zsh** with [Zimfw](https://github.com/zimfw/zimfw) framework
-- **Oh My Posh** for customizable prompt themes
+- **Powerlevel10k** prompt with the Catppuccin (lean/mocha) theme
 - Vim mode, syntax highlighting, autosuggestions, and history search
 - Custom Nerd Fonts (MesloLGS NF, JetBrainsMono, D2Coding)
 
@@ -102,7 +102,7 @@ All installation scripts are located in the `scripts/` directory:
 | `install-root-sdk.sh` | Qodana CLI, AWS CLI | root |
 | `install-docker.sh` | Docker Engine | root |
 | `install-sdk.sh` | fnm, SDKMAN, Bun, Deno, Claude Code, FVM | coder |
-| `install-ohmyposh.sh` | Oh My Posh prompt | coder |
+| `install-prompt.sh` | Zimfw modules (`.zimrc`), Powerlevel10k prompt, Orca history | coder |
 | `install-brew.sh` | Homebrew package manager | coder |
 | `install-graphite.sh` | Graphite CLI | coder |
 
@@ -126,7 +126,7 @@ All installation scripts are located in the `scripts/` directory:
 ### Modifying Shell Configuration
 
 - **Zimfw modules**: Edit `.zimrc`
-- **Oh My Posh theme**: Modify initialization in `scripts/install-ohmyposh.sh`
+- **Prompt theme**: Change `zstyle ':catppuccin:p10k'` in `scripts/install-prompt.sh`, or add overrides to `.p10k.zsh`
 - **Environment variables**: Update `.zshenv`
 
 ## CI/CD
@@ -146,7 +146,7 @@ Images are automatically built and published to GitHub Container Registry via Gi
 
 - **fnm vs nvm**: This image uses fnm instead of nvm. An alias `nvm="fnm"` is provided for compatibility
 - **Homebrew location**: Installed at `/home/linuxbrew/.linuxbrew/`
-- **Oh My Posh**: Installed via official script to `~/.local/bin`
+- **Powerlevel10k**: Installed as a Zimfw module; requires a Nerd Font in the client terminal
 - **Docker daemon**: Must be started separately in Coder workspaces
 - **Timezone**: Configured to `Asia/Seoul`
 
