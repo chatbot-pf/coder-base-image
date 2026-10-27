@@ -14,7 +14,6 @@ This is a Docker base image for Coder workspaces, built on top of `codercom/ente
 - Graphite CLI for stacked PRs
 - GitHub CLI extensions: `gh stack` (github/gh-stack) and `gh actions-lock` (github/gh-actions-lock)
 - AWS CLI, Google Cloud CLI, and Qodana CLI
-- Orca headless server (`orca-server` wrapper; launch via Coder template startup script)
 - Custom Nerd Fonts for terminal display
 
 ## Repository Structure
