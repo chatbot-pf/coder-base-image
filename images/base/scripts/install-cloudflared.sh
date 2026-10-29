@@ -12,7 +12,7 @@ echo "deb [signed-by=/usr/share/keyrings/cloudflare-public-v2.gpg] https://pkg.c
 
 # cloudflared 설치
 apt-get update
-apt-get install -y cloudflared
+DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends cloudflared
 apt-get clean
 rm -rf /var/lib/apt/lists/*
 
