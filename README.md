@@ -25,6 +25,7 @@ A comprehensive Docker base image for [Coder](https://coder.com/) workspaces, bu
 - **GitHub CLI extensions**: `gh stack` (native stacked PRs) and `gh actions-lock` (lock and verify GitHub Actions dependencies)
 - **GitHub CLI (gh)**: GitHub operations from terminal
 - **AWS CLI**: Amazon Web Services command line interface
+- **cloudflared**: Cloudflare Tunnel client (official Cloudflare apt repository)
 - **Qodana CLI**: JetBrains code quality platform
 
 ## Quick Start
@@ -101,6 +102,7 @@ All installation scripts are located in the `scripts/` directory:
 |--------|-------------|------|
 | `install-fonts.sh` | System fonts installation | root |
 | `install-root-sdk.sh` | Qodana CLI, AWS CLI | root |
+| `install-cloudflared.sh` | cloudflared (Cloudflare apt repository) | root |
 | `install-docker.sh` | Docker Engine | root |
 | `install-sdk.sh` | fnm, SDKMAN, Bun, Deno, Claude Code, FVM | coder |
 | `install-prompt.sh` | Zimfw modules (`.zimrc`), Powerlevel10k prompt, Orca history | coder |

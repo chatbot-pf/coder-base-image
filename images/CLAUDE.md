@@ -15,6 +15,7 @@ images/
         ├── install-fonts.sh       # 시스템 폰트 설치 (Root)
         ├── install-root-sdk.sh    # Root 레벨 도구 (Qodana, AWS CLI)
         ├── install-mise.sh        # mise 버전 매니저 설치 (Root, apt)
+        ├── install-cloudflared.sh # cloudflared 설치 (Root, apt)
         ├── install-docker.sh      # Docker Engine 설치 (Root)
         ├── install-sdk.sh         # 사용자 개발 도구 (mise 글로벌 런타임, Claude Code)
         ├── install-prompt.sh      # Zimfw 모듈 + Powerlevel10k 프롬프트
@@ -48,6 +49,7 @@ images/
 - AWS CLI
 - Google Cloud CLI
 - GitHub CLI
+- cloudflared (Cloudflare Tunnel 클라이언트)
 - Docker (coder 사용자가 docker 그룹에 포함)
 
 **기타:**
@@ -79,7 +81,10 @@ images/
    - Qodana CLI
    - AWS CLI
 
-5. **Docker 설치**
+5. **cloudflared 설치** (`install-cloudflared.sh`)
+   - Cloudflare 공식 apt repository
+
+6. **Docker 설치**
    - Docker Engine 설치
    - coder 사용자를 docker 그룹에 추가
 
@@ -174,6 +179,13 @@ Root 레벨 개발 도구:
 - Qodana CLI (JetBrains 코드 분석)
 - AWS CLI v2
 
+#### install-cloudflared.sh (Root)
+
+cloudflared 설치:
+- Cloudflare 공식 apt repository 사용 (`https://pkg.cloudflare.com/cloudflared any main`)
+- 서명 키: `/usr/share/keyrings/cloudflare-public-v2.gpg`
+- 바이너리만 설치하며 터널·서비스·인증 정보는 구성하지 않음 (워크스페이스별로 설정)
+
 #### install-docker.sh (Root)
 
 Docker Engine 설치:
@@ -248,6 +260,8 @@ GitHub CLI 확장 설치:
 6. Docker (`install-docker.sh`)
 
 **Root Phase (mise):** Docker 직전에 mise 바이너리를 apt로 시스템 설치 (`install-mise.sh`)
+
+**Root Phase (cloudflared):** mise 다음, Docker 직전에 cloudflared를 apt로 설치 (`install-cloudflared.sh`)
 
 **Coder User Phase:**
 1. SDK (`install-sdk.sh`) - mise 글로벌 런타임(node/bun/deno/java), npm 전역 패키지, Claude Code

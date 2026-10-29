@@ -96,6 +96,12 @@ RUN chmod +x /tmp/install-mise.sh && \
     /tmp/install-mise.sh && \
     rm /tmp/install-mise.sh
 
+# cloudflared 설치
+COPY --chown=root:root scripts/install-cloudflared.sh /tmp/install-cloudflared.sh
+RUN chmod +x /tmp/install-cloudflared.sh && \
+    /tmp/install-cloudflared.sh && \
+    rm /tmp/install-cloudflared.sh
+
 # Docker 설치
 COPY --chown=root:root scripts/install-docker.sh /tmp/install-docker.sh
 RUN chmod +x /tmp/install-docker.sh && \
